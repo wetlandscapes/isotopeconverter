@@ -199,9 +199,9 @@ $(document).ready(function () {
 
 <p><strong>To do:</strong></p>
 <ul>
-<li><strong>Add this .Rmd and the related .html file to the .Rbuildignore file.</strong></li>
 <li><strong>Check on the travis integration once I’ve sent a push request to my repo.</strong></li>
 <li><strong>Check on appveyor integration.</strong></li>
+<li><strong>Check code coverage.</strong></li>
 </ul>
 <p>This document includes the commands (and musings) used to setup the <code>isotopeconverter</code> package, both for my records and for others interested in the workflow. I’m largely following the guidelines laid out by Emil Hvitfeldt’s blog post, <a href="https://www.hvitfeldt.me/blog/usethis-workflow-for-package-development/">usethis workflow for package development</a></p>
 <div id="git-and-github-setup" class="section level2">
@@ -216,17 +216,22 @@ $(document).ready(function () {
 <div id="package-generation" class="section level2">
 <h2>Package generation</h2>
 <p>Load the packages I’m going to use.</p>
-<pre class="r"><code>library(usethis)
-library(roxygen2)
+<pre class="r"><code>#Explicitly used libraries
+library(usethis)
 library(devtools)
 library(available)
-library(covr) #Used for code coverage</code></pre>
+library(covr) #Used for code coverage
+
+#Implicitly used packages
+#library(roxygen2)
+#library(spelling)</code></pre>
 <p>Check that the proposed package name is available and not associated with some weird sex act (the function checks if there is an Urban Dictionary entry).</p>
 <pre class="r"><code>available::available(&quot;isotopeconverter&quot;)</code></pre>
 <p>Create the package!</p>
 <pre class="r"><code>usethis::create_package(path = getwd())</code></pre>
 <p>First time I did this I entered “~” as the argument to <code>path</code> and it made me project in my home directory, rather than my working directory. So, be explicit.</p>
 <p>That was kind of a weird step, because it wanted me overwrite the Rproject I was already working in. I just told the dialogue box not not to overwrite. Everything seems okay.</p>
+<p>Once I made the package I updated the <code>DESCRIPTION</code> file with my information. Also, I did not have access to the “Build” tab (next to Environment, History, and Connections) until re-starting RStudio.</p>
 <div id="other-package-odds-and-ends" class="section level3">
 <h3>Other package odds and ends</h3>
 <p>License</p>
@@ -235,13 +240,33 @@ library(covr) #Used for code coverage</code></pre>
 <pre class="r"><code>usethis::use_readme_md()</code></pre>
 </div>
 </div>
-<div id="setup-continuous-integration-and-code-coverage" class="section level2">
-<h2>Setup continuous integration and code coverage</h2>
+<div id="setup-continuous-integration" class="section level2">
+<h2>Setup continuous integration</h2>
 <div id="travis" class="section level3">
 <h3>travis</h3>
 <p>As I understand it, Travis is used to check continuous integration on Unix-based systems.</p>
 <pre class="r"><code>usethis::use_travis()</code></pre>
 <p>I’d not actually registered with travis-ci yet, so when I ran this code I went to a page that didn’t exist. However, by navigating to <a href="https://travis-ci.org" class="uri">https://travis-ci.org</a> I was automatically taken to a registration page that knew I was trying to link my GitHub account to travis. Once I entered my entered my GitHub account, everything seemed to sync.</p>
+<p>I’ve updated my <code>.travis.yml</code> file to contain the following information after watching the <a href="https://www.youtube.com/watch?v=As5SM7-F02w&amp;list=PLk3B5c8iCV-T4LM0mwEyWIunIunLyEjqM&amp;index=3">continuous integration video</a> by John Muschelli:</p>
+<pre><code># R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+
+os:
+  - linux
+  - osx
+  
+r:
+  - oldrel
+  - release
+  - devel
+
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'</code></pre>
 </div>
 <div id="appveyor" class="section level3">
 <h3>appveyor</h3>
@@ -250,12 +275,15 @@ library(covr) #Used for code coverage</code></pre>
 <p>Similar experience to Travis – didn’t have an account and so I registered using my GitHub account.</p>
 <p>Comment: Seems GitLab may have its own continuous integration tools.</p>
 </div>
+</div>
+<div id="unit-testing" class="section level2">
+<h2>Unit testing</h2>
 <div id="codecov" class="section level3">
 <h3>codecov</h3>
 <p>Provides some indication of how well unit tests cover the code being generated. I’m going to use it to try to shame myself into learning how to better use unit tests via the <code>testthat</code> package.</p>
 <pre class="r"><code>usethis::use_coverage(type = &quot;codecov&quot;)</code></pre>
 <p>This required me to install the package <code>covr</code>.</p>
-<p>The function prompted me to add the following code to my <code>.travis.yml</code> file:</p>
+<p>The codecov dashboard provides a token for use with my package, but I’m not entirely sure what to do with it. Also, the <code>usethis</code> function prompted me to add the following code to my <code>.travis.yml</code> file:</p>
 <pre><code>after_success:
   - Rscript -e 'library(covr); codecov()'</code></pre>
 <p>The example R package from <a href="https://github.com/codecov/example-r">codecov</a> has a slightly different ammendment:</p>
@@ -265,6 +293,21 @@ library(covr) #Used for code coverage</code></pre>
 after_success:
   - Rscript -e 'library(covr); codecov()'</code></pre>
 </div>
+<div id="setup-testthat" class="section level3">
+<h3>Setup <code>testthat</code></h3>
+<pre class="r"><code>usethis::use_testthat()</code></pre>
+<p>Once I’m ready, I should use <code>usethis::use_test()</code> to setup unit tests.</p>
+</div>
+<div id="more-package-odds-and-ends" class="section level3">
+<h3>More package odds and ends</h3>
+<pre class="r"><code>usethis::use_spell_check()</code></pre>
+<p>To actually spell-check: <code>devtools::check()</code>.</p>
+</div>
+</div>
+<div id="more-stuff-that-could-be-done." class="section level2">
+<h2>More stuff that could be done.</h2>
+<p>Here is a comprehensive list of other functions that should be perused for other things I’d like to add to the package: <a href="https://usethis.r-lib.org/reference/index.html" class="uri">https://usethis.r-lib.org/reference/index.html</a></p>
+<p>And… I think that’s</p>
 </div>
 
 

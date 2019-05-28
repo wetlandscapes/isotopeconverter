@@ -59,7 +59,7 @@ First time I did this I entered "~" as the argument to `path` and it made me pro
 
 That was kind of a weird step, because it wanted me overwrite the Rproject I was already working in. I just told the dialogue box not not to overwrite. Everything seems okay.
 
-Once I made the package I updated the `DESCRIPTION` file with my information.
+Once I made the package I updated the `DESCRIPTION` file with my information. Also, I did not have access to the "Build" tab (next to Environment, History, and Connections) until re-starting RStudio.
 
 ### Other package odds and ends
 
@@ -86,6 +86,30 @@ usethis::use_travis()
 ```
 
 I'd not actually registered with travis-ci yet, so when I ran this code I went to a page that didn't exist. However, by navigating to https://travis-ci.org I was automatically taken to a registration page that knew I was trying to link my GitHub account to travis. Once I entered my entered my GitHub account, everything seemed to sync.
+
+I've updated my `.travis.yml` file to contain the following information after watching the [continuous integration video](https://www.youtube.com/watch?v=As5SM7-F02w&list=PLk3B5c8iCV-T4LM0mwEyWIunIunLyEjqM&index=3) by John Muschelli:
+
+```
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+
+os:
+  - linux
+  - osx
+  
+r:
+  - oldrel
+  - release
+  - devel
+
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+```
 
 ### appveyor
 
