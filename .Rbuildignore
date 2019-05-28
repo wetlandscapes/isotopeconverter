@@ -1,0 +1,8 @@
+^isotopeconverter\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^\.travis\.yml$
+^appveyor\.yml$
+^codecov\.yml$
+^package_setup\.Rmd$
+^package_setup\.html$

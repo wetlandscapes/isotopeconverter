@@ -1,0 +1,23 @@
+Package: isotopeconverter
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jason",
+           family = "Mercer",
+           role = c("aut", "cre"),
+           email = "jasonjmercer@gmail.com",
+           comment = c(ORCID = "0000-0002-6193-5032"))
+Description: The intent of this package is pretty simple: Allow users to convert
+    between different isotopic standards, while accounting for uncertainties in
+    those conversions. For example, if you were provided Hydrogen-2 isotope data
+    in units of permil on the VSMOW2 scale, but wanted to know the actual 2H/1H
+    ratio, then this package can help automate those conversions, while also
+    accounting for uncertainties in VSMOW2.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    covr,
+    testthat,
+    spelling
+Language: en-US
