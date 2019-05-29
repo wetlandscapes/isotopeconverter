@@ -267,6 +267,11 @@ r_packages:
 
 after_success:
   - Rscript -e 'library(covr); codecov()'</code></pre>
+<p>Okay, it looks like because I’ve setup unit tests, but haven’t actually populated the <code>tests/testthat.R</code> file with any tests. So, for now, I’ve commented out the <code>test_check</code> line.</p>
+<pre class="r"><code>library(testthat)
+library(isotopeconverter)
+
+#test_check(&quot;isotopeconverter&quot;)</code></pre>
 </div>
 <div id="appveyor" class="section level3">
 <h3>appveyor</h3>
@@ -303,6 +308,10 @@ after_success:
 <pre class="r"><code>usethis::use_spell_check()</code></pre>
 <p>To actually spell-check: <code>devtools::check()</code>.</p>
 </div>
+</div>
+<div id="loose-ends-ive-figured-out" class="section level2">
+<h2>Loose ends I’ve figured out</h2>
+<p><code>usethis::use_build_ignore</code> is useful for adding files and folders to the <code>.Rbuildignore</code> file. I figured this out when using <code>devtools::check</code>, which was returning a “Note” that I had a non-standard file in my package. It was</p>
 </div>
 <div id="more-stuff-that-could-be-done." class="section level2">
 <h2>More stuff that could be done.</h2>

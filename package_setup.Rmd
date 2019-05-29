@@ -45,7 +45,7 @@ library(covr) #Used for code coverage
 
 Check that the proposed package name is available and not associated with some weird sex act (the function checks if there is an Urban Dictionary entry).
 
-```{r, cache=TRUE, eval=FALSE}
+```{r}
 available::available("isotopeconverter")
 ```
 
@@ -111,6 +111,16 @@ after_success:
   - Rscript -e 'library(covr); codecov()'
 ```
 
+Okay, it looks like because I've setup unit tests, but haven't actually populated the `tests/testthat.R` file with any tests. So, for now, I've commented out the `test_check` line.
+
+```{r}
+library(testthat)
+library(isotopeconverter)
+
+#test_check("isotopeconverter")
+```
+
+
 ### appveyor
 
 Appveyor is Travis for Windows. So, by having both Travis and Appveyor, I have continuous integration across platforms.
@@ -167,6 +177,10 @@ usethis::use_spell_check()
 ```
 
 To actually spell-check: `devtools::check()`.
+
+## Loose ends I've figured out
+
+`usethis::use_build_ignore` is useful for adding files and folders to the `.Rbuildignore` file. I figured this out when using `devtools::check`, which was returning a "Note" that I had a non-standard file in my package. It was
 
 ## More stuff that could be done.
 

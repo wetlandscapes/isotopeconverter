@@ -1,4 +1,4 @@
 library(testthat)
 library(isotopeconverter)
 
-test_check("isotopeconverter")
+#test_check("isotopeconverter")
